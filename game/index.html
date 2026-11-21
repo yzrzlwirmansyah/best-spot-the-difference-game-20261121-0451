@@ -3,17 +3,90 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Block Dodger</title>
-<style>
-  html, body { margin: 0; height: 100%; overflow: hidden; background: #11141b; }
-  #game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
-  /* Read aloud, never shown: the status line screen readers announce. */
-  #status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-</style>
+<title>Spot the Difference — Cosmic Laundromat</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<canvas id="game" aria-label="Block Dodger: move the paddle left and right to dodge falling blocks and catch coins"></canvas>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">✦</span>
+    <span class="brand-name">Cosmic Laundromat</span>
+    <span class="brand-sub">spot the difference</span>
+  </div>
+  <div class="hud" role="status" aria-label="Game status">
+    <span class="pill" id="hud-level">Shift 1 of 3 — Laundromat</span>
+    <span class="pill time" id="hud-time">1:40</span>
+    <span class="pill" id="hud-score-pill">Score <strong id="hud-score">0</strong></span>
+    <span class="pill left" id="hud-left">7 left</span>
+    <span class="pill mistakes" id="hud-mistakes">✕ 0</span>
+    <button class="pill btn" id="hint-btn" type="button">Hint (<span id="hint-count">2</span>)</button>
+  </div>
+</header>
+
+<main class="stage-wrap">
+  <p class="scene-label" id="hud-scene">Shift 1 — Laundromat</p>
+  <div class="stage" id="stage">
+    <figure class="panel">
+      <figcaption class="panel-tag">Picture A</figcaption>
+      <canvas id="canvas-a" width="640" height="440" tabindex="0"
+        aria-label="Left picture: find the differences"></canvas>
+    </figure>
+    <div class="vs" aria-hidden="true">VS</div>
+    <figure class="panel">
+      <figcaption class="panel-tag">Picture B</figcaption>
+      <canvas id="canvas-b" width="640" height="440" tabindex="0"
+        aria-label="Right picture: find the differences"></canvas>
+    </figure>
+
+    <section class="overlay hidden" id="screen-title" aria-labelledby="title-heading">
+      <p class="kicker">A spot-the-difference game</p>
+      <h1 id="title-heading">Cosmic<br>Laundromat</h1>
+      <p class="lede">Two pictures, seven hidden differences, one very late night shift.
+        Find all 7 in each cosmic scene — the laundromat, the lost &amp; found
+        orbit, and the rooftop drying dock.</p>
+      <ul class="rules">
+        <li><strong>Click a difference</strong> on either picture to mark it on both.</li>
+        <li><strong>+100</strong> per find, <strong>+25</strong> for a quick find, <strong>+5</strong> per second left.</li>
+        <li>A wrong click costs <strong>3 seconds</strong>. Two hints per run — press <strong>H</strong>.</li>
+      </ul>
+      <p class="best" id="best-line"></p>
+      <button class="cta" id="title-play-btn" type="button">Start night shift</button>
+    </section>
+
+    <section class="overlay hidden" id="screen-clear" aria-labelledby="clear-title">
+      <p class="kicker">Shift complete</p>
+      <h2 id="clear-title">Shift cleared!</h2>
+      <p class="stats" id="clear-stats"></p>
+      <button class="cta" id="next-btn" type="button">Next shift</button>
+    </section>
+
+    <section class="overlay hidden" id="screen-over" aria-labelledby="over-title">
+      <p class="kicker">Out of time</p>
+      <h2 id="over-title">Shift ended — time ran out</h2>
+      <p class="stats" id="over-stats"></p>
+      <p class="lede">The differences you missed are circled in gold on both pictures.</p>
+      <button class="cta" id="retry-btn" type="button">Retry this shift</button>
+    </section>
+
+    <section class="overlay hidden" id="screen-victory" aria-labelledby="win-title">
+      <p class="kicker">All three shifts done</p>
+      <h2 id="win-title">✦ Certified Cosmic Inspector ✦</h2>
+      <p class="lede">Every difference found, every scene cleared. The laundromat
+        is spotless — mostly because you spotted everything.</p>
+      <p class="big-score"><span id="win-score">0</span> <small>points</small></p>
+      <p class="stats">Best shift: <strong id="win-best">0</strong> &nbsp;·&nbsp;
+        Mistakes: <strong id="win-mistakes">0</strong></p>
+      <button class="cta" id="again-btn" type="button">Play another shift</button>
+    </section>
+  </div>
+  <p class="foot">Tip: differences hide in plain sight — labels, hands, colours, counts.
+    Click either picture; a find is marked on both. H = hint.</p>
+</main>
+
 <p id="status" role="status" aria-live="polite"></p>
-<script type="module" src="./src/main.js"></script>
+
+<script defer src="js/levels.js"></script>
+<script defer src="js/art.js"></script>
+<script defer src="js/game.js"></script>
 </body>
 </html>
